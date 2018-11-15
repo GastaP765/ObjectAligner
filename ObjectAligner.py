@@ -9,8 +9,6 @@ def Align():
 	tar2 = mc.textField(end, q=True, text=True)
 	tar1_trs = mc.xform(tar1, q=True, ws=True, rp=True)
 	tar2_trs = mc.xform(tar2, q=True, ws=True, rp=True)
-	print tar1_trs
-	print tar2_trs
 
 	trsx = (tar2_trs[0] - tar1_trs[0]) / (cnt + 1)
 	trsy = (tar2_trs[1] - tar1_trs[1]) / (cnt + 1)
@@ -25,40 +23,41 @@ def Align():
 
 
 def stt_set():
-    global sst, tar
-    sub = mc.ls(sl=True)
-    sst = mc.textField(stt, e=True, text='{}'.format(sub[0]))
-    if len(sub) >= 1:
-    	tar = mc.textField(end, e=True, text='{}'.format(sub[1]))
+	global sst, tar
+	sub = mc.ls(sl=True)
+	sst = mc.textField(stt, e=True, text='{}'.format(sub[0]))
+	if len(sub) > 1:
+		tar = mc.textField(end, e=True, text='{}'.format(sub[1]))
 
 def end_set():
-    global sst, tar
-    sub = mc.ls(sl=True)
-    tar = mc.textField(end, e=True, text='{}'.format(sub[0]))
-    if len(sub) >= 1:
-    	sst = mc.textField(stt, e=True, text='{}'.format(sub[1]))
+	global sst, tar
+	sub = mc.ls(sl=True)
+	tar = mc.textField(end, e=True, text='{}'.format(sub[0]))
+	if len(sub) > 1:
+		sst = mc.textField(stt, e=True, text='{}'.format(sub[1]))
 
+def mainWin():
+	global stt, end
+	if mc.window('ObjectAligner', exists=True):
+		mc.deleteUI('ObjectAligner')
+	
+	createWin = mc.window('ObjectAligner', t='Object Aligner', widthHeight=(300, 117))
+	mc.window('ObjectAligner', e=True, widthHeight=(300, 117))
+	mc.columnLayout(adj=True)
+	
+	mc.frameLayout(l='Range to Alignment')
+	mc.rowLayout(nc=3, cat=[(1, 'left', 31), (2, 'left', 5)])
+	mc.text('start :')
+	stt = mc.textField('stt', w=170)
+	mc.button(l='set', w=50, h=20, c='stt_set()')
+	mc.setParent('..')
+	mc.rowLayout(nc=3, cat=[(1, 'left', 38), (2, 'left', 5)])
+	mc.text('end :')
+	end = mc.textField('end', w=170)
+	mc.button(l='set', w=50, h=20, c='end_set()')
+	mc.setParent('..')
+	mc.button(l='Execution', w=300, h=30, c='Align()')
+	
+	mc.showWindow(createWin)
 
-if mc.window('Object Aligner', exists=True):
-    mc.deleteUI('Object Aligner')
-
-createWin = mc.window('Object Aligner', t='Object Aligner', w=300, h=100)
-mc.columnLayout(adj=True)
-
-mc.frameLayout(l='Range to Alignment')
-mc.rowLayout(nc=3, cat=[(1, 'left', 0), (2, 'left', 5)])
-mc.text('       start :')
-stt = mc.textField('stt', w=170)
-mc.button(l='set', w=50, h=20, c='stt_set()')
-mc.setParent('..')
-mc.rowLayout(nc=3, cat=[(1, 'left', 0), (2, 'left', 5)])
-mc.text('         end :')
-end = mc.textField('end', w=170)
-mc.button(l='set', w=50, h=20, c='end_set()')
-mc.setParent('..')
-mc.button(l='Execution', w=300, h=30, c='Align()')
-
-
-
-
-mc.showWindow(createWin)
+mainWin()
