@@ -1,7 +1,7 @@
 import maya.cmds as mc
 
 
-def Align():
+def Align(*args):
 	lst = mc.ls(sl=True)
 	cnt = len(lst)
 
@@ -22,14 +22,14 @@ def Align():
 			mc.setAttr('{}.t'.format(lst[i]), tar1_trs[0] - rop[0] + trsx*j, tar1_trs[1] - rop[1] + trsy*j, tar1_trs[2] - rop[2] + trsz*j)
 
 
-def stt_set():
+def stt_set(*args):
 	global sst, tar
 	sub = mc.ls(sl=True)
 	sst = mc.textField(stt, e=True, text='{}'.format(sub[0]))
 	if len(sub) > 1:
 		tar = mc.textField(end, e=True, text='{}'.format(sub[1]))
 
-def end_set():
+def end_set(*args):
 	global sst, tar
 	sub = mc.ls(sl=True)
 	tar = mc.textField(end, e=True, text='{}'.format(sub[0]))
@@ -49,15 +49,18 @@ def mainWin():
 	mc.rowLayout(nc=3, cat=[(1, 'left', 31), (2, 'left', 5)])
 	mc.text('start :')
 	stt = mc.textField('stt', w=170)
-	mc.button(l='set', w=50, h=20, c='stt_set()')
+	mc.button(l='set', w=50, h=20, c=stt_set)
 	mc.setParent('..')
 	mc.rowLayout(nc=3, cat=[(1, 'left', 38), (2, 'left', 5)])
 	mc.text('end :')
 	end = mc.textField('end', w=170)
-	mc.button(l='set', w=50, h=20, c='end_set()')
+	mc.button(l='set', w=50, h=20, c=end_set)
 	mc.setParent('..')
-	mc.button(l='Execution', w=300, h=30, c='Align()')
+	mc.button(l='Execution', w=300, h=30, c=Align)
 	
 	mc.showWindow(createWin)
 
-mainWin()
+def consoleKey():
+	mainWin()
+
+consoleKey()
